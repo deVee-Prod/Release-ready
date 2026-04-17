@@ -41,6 +41,8 @@ export default function ReleaseReadyPage() {
     const scale = Math.max(3000 / img.width, 3000 / img.height);
     const dw = img.width * scale;
     const dh = img.height * scale;
+    
+    // תיקון החישוב: ה-Canvas חייב להשתמש בדיוק באותו Offset של ה-CSS
     const dx = (3000 - dw) * offset.x;
     const dy = (3000 - dh) * offset.y;
 
@@ -89,6 +91,7 @@ export default function ReleaseReadyPage() {
       const rect = imageRef.current!.getBoundingClientRect();
       const x = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
       const y = Math.min(Math.max((clientY - rect.top) / rect.height, 0), 1);
+      // שימוש בערכים ישרים כדי למנוע בלבול בחישוב הקנבס
       setOffset({ x: 1 - x, y: 1 - y });
     });
   }, [isDragging]);
@@ -135,17 +138,26 @@ export default function ReleaseReadyPage() {
                 onTouchMove={(e) => handleMove(e.touches[0].clientX, e.touches[0].clientY)}
                 className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black border border-white/5 cursor-move"
               >
-                {/* שינוי קריטי: מציג את ה-masteredUrl (עם החתימה) כשהוא מוכן, ואת המקור רק בזמן גרירה */}
+                {/* שיפור קריטי: ה-objectPosition נשאר קבוע על ה-Offset תמיד, מה שמונע "קפיצה" למרכז */}
                 <img 
-                  src={(isDragging || isProcessing) ? imageUrl! : (masteredUrl || imageUrl!)} 
+                  src={imageUrl!} 
                   style={{
                     objectFit: 'cover',
-                    objectPosition: isDragging ? `${offset.x * 100}% ${offset.y * 100}%` : 'center',
+                    objectPosition: `${offset.x * 100}% ${offset.y * 100}%`,
                     transition: isDragging ? 'none' : 'object-position 0.2s ease-out'
                   }}
                   className={`w-full h-full pointer-events-none ${appState === "validating" || isProcessing ? "opacity-40 blur-sm" : ""}`} 
                 />
                 
+                {/* החתימה בתצוגה (Preview) מעל התמונה המקורית כדי שתראה אותה בזמן אמת */}
+                {addSignature && appState === "ready" && !isDragging && (
+                  <img 
+                    src="/deVee Sign Transperent.png" 
+                    className="absolute bottom-[4%] right-[4%] w-[12%] opacity-80 pointer-events-none"
+                    style={{ transform: 'rotate(-8deg)' }}
+                  />
+                )}
+
                 {appState === "ready" && !isDragging && !isProcessing && (
                   <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-2 border border-white/10">
                     <Move className="w-3 h-3 text-[#FFD700]" />
@@ -170,7 +182,6 @@ export default function ReleaseReadyPage() {
                       <CheckSquare className="w-6 h-6 text-[#FFD700]" /> : 
                       <Square className="w-6 h-6 text-white/20" />
                     }
-                    {/* כיתוב באותיות גדולות וקטנות */}
                     <span className="text-[11px] font-black tracking-widest text-white/70">
                       Add deVee Sign
                     </span>
