@@ -15,7 +15,10 @@ export default function ReleaseReadyPage() {
   
   const fileInputRef = useRef<HTMLInputElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  const requestRef = useRef<number | null>(null)
+  
+  // Refs למניעת קפיצות בגרירה
+  const startPos = useRef({ x: 0, y: 0 })
+  const startOffset = useRef({ x: 0.5, y: 0.5 })
 
   useEffect(() => {
     document.title = "deVee | Release Ready";
@@ -42,7 +45,6 @@ export default function ReleaseReadyPage() {
     const dw = img.width * scale;
     const dh = img.height * scale;
     
-    // תיקון החישוב: ה-Canvas חייב להשתמש בדיוק באותו Offset של ה-CSS
     const dx = (3000 - dw) * offset.x;
     const dy = (3000 - dh) * offset.y;
 
@@ -82,19 +84,28 @@ export default function ReleaseReadyPage() {
     }
   }, [imageUrl, isDragging, handleMastering, addSignature])
 
-  const handleMove = useCallback((clientX: number, clientY: number) => {
+  // פונקציות גרירה משופרות למניעת "קפיצות"
+  const startDrag = (clientX: number, clientY: number) => {
+    setIsDragging(true)
+    startPos.current = { x: clientX, y: clientY }
+    startOffset.current = { ...offset }
+  }
+
+  const onDrag = (clientX: number, clientY: number) => {
     if (!isDragging || !imageRef.current) return;
+
+    const rect = imageRef.current.getBoundingClientRect()
     
-    if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    
-    requestRef.current = requestAnimationFrame(() => {
-      const rect = imageRef.current!.getBoundingClientRect();
-      const x = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
-      const y = Math.min(Math.max((clientY - rect.top) / rect.height, 0), 1);
-      // שימוש בערכים ישרים כדי למנוע בלבול בחישוב הקנבס
-      setOffset({ x: 1 - x, y: 1 - y });
-    });
-  }, [isDragging]);
+    // חישוב המרחק שהזזנו את העכבר יחסית לגודל הקופסה
+    const deltaX = (clientX - startPos.current.x) / rect.width
+    const deltaY = (clientY - startPos.current.y) / rect.height
+
+    // עדכון ה-Offset בצורה יחסית (בלי קפיצות)
+    setOffset({
+      x: Math.min(Math.max(startOffset.current.x - deltaX, 0), 1),
+      y: Math.min(Math.max(startOffset.current.y - deltaY, 0), 1)
+    })
+  }
 
   return (
     <main className="relative h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-8 font-sans overflow-hidden select-none touch-none">
@@ -130,15 +141,15 @@ export default function ReleaseReadyPage() {
             <div className="space-y-6 flex flex-col items-center">
               <div 
                 ref={imageRef}
-                onMouseDown={() => setIsDragging(true)}
+                onMouseDown={(e) => startDrag(e.clientX, e.clientY)}
+                onMouseMove={(e) => onDrag(e.clientX, e.clientY)}
                 onMouseUp={() => setIsDragging(false)}
-                onMouseMove={(e) => handleMove(e.clientX, e.clientY)}
-                onTouchStart={() => setIsDragging(true)}
+                onMouseLeave={() => setIsDragging(false)}
+                onTouchStart={(e) => startDrag(e.touches[0].clientX, e.touches[0].clientY)}
+                onTouchMove={(e) => onDrag(e.touches[0].clientX, e.touches[0].clientY)}
                 onTouchEnd={() => setIsDragging(false)}
-                onTouchMove={(e) => handleMove(e.touches[0].clientX, e.touches[0].clientY)}
                 className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black border border-white/5 cursor-move"
               >
-                {/* שיפור קריטי: ה-objectPosition נשאר קבוע על ה-Offset תמיד, מה שמונע "קפיצה" למרכז */}
                 <img 
                   src={imageUrl!} 
                   style={{
@@ -149,7 +160,6 @@ export default function ReleaseReadyPage() {
                   className={`w-full h-full pointer-events-none ${appState === "validating" || isProcessing ? "opacity-40 blur-sm" : ""}`} 
                 />
                 
-                {/* החתימה בתצוגה (Preview) מעל התמונה המקורית כדי שתראה אותה בזמן אמת */}
                 {addSignature && appState === "ready" && !isDragging && (
                   <img 
                     src="/deVee Sign Transperent.png" 
