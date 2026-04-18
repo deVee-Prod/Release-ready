@@ -104,7 +104,7 @@ export default function ReleaseReadyPage() {
     <main className="relative min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-8 font-sans overflow-y-auto select-none">
       
       <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-full h-[400px] bg-[#FFD700]/5 blur-[120px]" />
+        <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#FFD700]/20 rounded-full blur-[120px]" />
       </div>
 
       <header className="relative z-10 flex flex-col items-center gap-4 flex-none">
