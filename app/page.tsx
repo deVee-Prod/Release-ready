@@ -101,13 +101,12 @@ export default function ReleaseReadyPage() {
   }
 
   return (
-    <main className="relative h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-8 font-sans overflow-hidden select-none touch-none">
+    <main className="relative min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-8 font-sans overflow-y-auto select-none">
       
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-full h-[400px] bg-[#FFD700]/5 blur-[120px]" />
       </div>
 
-      {/* Header מעודכן - בלי מסגרת ובלי רקע לאייקון */}
       <header className="relative z-10 flex flex-col items-center gap-4 flex-none">
         <div className="w-20 h-20 transition-transform hover:scale-105">
           <img 
@@ -144,7 +143,7 @@ export default function ReleaseReadyPage() {
                 onMouseUp={() => setIsDragging(false)}
                 onMouseLeave={() => setIsDragging(false)}
                 onTouchStart={(e) => startDrag(e.touches[0].clientX, e.touches[0].clientY)}
-                onTouchMove={(e) => onDrag(e.touches[0].clientX, e.touches[0].clientY)}
+                onTouchMove={(e) => { e.stopPropagation(); onDrag(e.touches[0].clientX, e.touches[0].clientY) }}
                 onTouchEnd={() => setIsDragging(false)}
                 className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black border border-white/5 cursor-move"
               >
