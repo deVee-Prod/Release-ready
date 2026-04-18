@@ -16,7 +16,6 @@ export default function ReleaseReadyPage() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
   
-  // Refs למניעת קפיצות בגרירה
   const startPos = useRef({ x: 0, y: 0 })
   const startOffset = useRef({ x: 0.5, y: 0.5 })
 
@@ -84,7 +83,6 @@ export default function ReleaseReadyPage() {
     }
   }, [imageUrl, isDragging, handleMastering, addSignature])
 
-  // פונקציות גרירה משופרות למניעת "קפיצות"
   const startDrag = (clientX: number, clientY: number) => {
     setIsDragging(true)
     startPos.current = { x: clientX, y: clientY }
@@ -93,14 +91,9 @@ export default function ReleaseReadyPage() {
 
   const onDrag = (clientX: number, clientY: number) => {
     if (!isDragging || !imageRef.current) return;
-
     const rect = imageRef.current.getBoundingClientRect()
-    
-    // חישוב המרחק שהזזנו את העכבר יחסית לגודל הקופסה
     const deltaX = (clientX - startPos.current.x) / rect.width
     const deltaY = (clientY - startPos.current.y) / rect.height
-
-    // עדכון ה-Offset בצורה יחסית (בלי קפיצות)
     setOffset({
       x: Math.min(Math.max(startOffset.current.x - deltaX, 0), 1),
       y: Math.min(Math.max(startOffset.current.y - deltaY, 0), 1)
@@ -114,9 +107,14 @@ export default function ReleaseReadyPage() {
         <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-full h-[400px] bg-[#FFD700]/5 blur-[120px]" />
       </div>
 
+      {/* Header מעודכן - בלי מסגרת ובלי רקע לאייקון */}
       <header className="relative z-10 flex flex-col items-center gap-4 flex-none">
-        <div className="w-20 h-20 rounded-2xl overflow-hidden border border-[#FFD700]/30 shadow-[0_0_30px_rgba(255,215,0,0.15)]">
-          <img src="/Release Ready iCon.png" alt="Icon" className="w-full h-full object-cover" />
+        <div className="w-20 h-20 transition-transform hover:scale-105">
+          <img 
+            src="/Release Ready iCon.png?v=2" 
+            alt="Icon" 
+            className="w-full h-full object-contain" 
+          />
         </div>
         <h1 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40 drop-shadow-md italic">
           RELEASE READY
