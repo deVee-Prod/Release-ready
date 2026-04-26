@@ -107,7 +107,7 @@ export default function ReleaseReadyPage() {
         <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#FFD700]/20 rounded-full blur-[120px]" />
       </div>
 
-      <header className="relative z-10 flex flex-col items-center gap-4 flex-none">
+      <header className="relative z-10 flex flex-col items-center gap-4 flex-none mb-4 md:mb-0">
         <div className="w-20 h-20 transition-transform hover:scale-105">
           <img 
             src="/Release Ready iCon.png?v=2" 
@@ -120,7 +120,10 @@ export default function ReleaseReadyPage() {
         </h1>
       </header>
 
-      <div className="relative z-10 w-full flex-1 flex items-center justify-center max-w-[450px]">
+      <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center max-w-[450px]">
+        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25 mb-4 md:mb-5">
+          3000×3000 CUTTER
+        </p>
         <div className="w-full bg-[#121212] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-md">
           
           {appState === "idle" ? (
@@ -211,7 +214,7 @@ export default function ReleaseReadyPage() {
         </div>
       </div>
 
-      <footer className="relative z-10 flex-none flex flex-col items-center gap-4 py-4">
+      <footer className="relative z-10 flex-none flex flex-col items-center gap-4 py-4 mt-4 md:mt-0">
         <p className="text-[10px] font-medium tracking-[0.2em] text-white/30">Powered By deVee Boutique Label</p>
         <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-lg">
           <img src="/label_logo.jpg" alt="Label" className="w-full h-full object-cover" />
