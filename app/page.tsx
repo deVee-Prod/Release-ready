@@ -101,13 +101,13 @@ export default function ReleaseReadyPage() {
   }
 
   return (
-    <main className="relative min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-8 font-sans overflow-y-auto select-none">
+    <main className="relative min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-6 gap-6 md:gap-0 md:py-8 font-sans overflow-y-auto select-none">
       
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#FFD700]/20 rounded-full blur-[120px]" />
       </div>
 
-      <header className="relative z-10 flex flex-col items-center gap-4 flex-none mb-4 md:mb-0">
+      <header className="relative z-10 flex flex-col items-center gap-4 flex-none">
         <div className="w-20 h-20 transition-transform hover:scale-105">
           <img 
             src="/Release Ready iCon.png?v=2" 
@@ -121,11 +121,17 @@ export default function ReleaseReadyPage() {
       </header>
 
       <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center max-w-[450px]">
-        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25 mb-4 md:mb-5">
-          3000×3000 CUTTER
-        </p>
         <div className="w-full bg-[#121212] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-md">
           
+          {/* Card header - always visible */}
+          <div className="flex flex-col items-center gap-1.5 mb-6">
+            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#FFD700]/50">
+              3000×3000 CUTTER
+            </p>
+            <p className="text-[9px] text-white/25 tracking-wide text-center">
+              הפורמט הנדרש עבור Spotify &amp; Apple Music
+            </p>
+          </div>
           {appState === "idle" ? (
             <div className="w-full aspect-square flex items-center justify-center">
               <button onClick={() => fileInputRef.current?.click()} className="group w-full h-full border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 hover:bg-[#FFD700]/5 transition-all">
@@ -214,7 +220,7 @@ export default function ReleaseReadyPage() {
         </div>
       </div>
 
-      <footer className="relative z-10 flex-none flex flex-col items-center gap-4 py-4 mt-4 md:mt-0">
+      <footer className="relative z-10 flex-none flex flex-col items-center gap-4 py-4">
         <p className="text-[10px] font-medium tracking-[0.2em] text-white/30">Powered By deVee Boutique Label</p>
         <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-lg">
           <img src="/label_logo.jpg" alt="Label" className="w-full h-full object-cover" />
