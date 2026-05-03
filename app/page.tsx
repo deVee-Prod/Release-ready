@@ -189,7 +189,7 @@ export default function ReleaseReadyPage() {
               </div>
 
               {appState === "ready" && (
-                <div className="w-full space-y-4 animate-in fade-in slide-in-from-bottom-4">
+                <div className="w-full space-y-4">
                   <button 
                     onClick={() => setAddSignature(!addSignature)}
                     className="w-full flex items-center gap-4 bg-[#1a1a1a] p-5 rounded-2xl border border-white/5 hover:border-[#FFD700]/30 transition-all"
