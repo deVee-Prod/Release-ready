@@ -101,7 +101,7 @@ export default function ReleaseReadyApp() {
   }
 
   return (
-    <main className="relative min-h-screen bg-[#0a0a0a] text-white flex flex-col items-center px-4 py-6 gap-10 md:gap-0 md:py-8 font-sans overflow-y-auto select-none">
+    <main className="relative min-h-screen text-white flex flex-col items-center px-4 py-6 gap-10 md:gap-0 md:py-8 font-sans overflow-y-auto select-none">
 
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#FFD700]/20 rounded-full blur-[120px]" />

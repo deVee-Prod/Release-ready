@@ -6,7 +6,7 @@ const ReleaseReadyApp = dynamic(() => import('./release-ready-app'), {
   ssr: false,
   loading: () => (
     <main style={{
-      position: 'fixed', inset: 0, background: '#0a0a0a', color: '#fff',
+      position: 'fixed', inset: 0, background: 'transparent', color: '#fff',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       gap: '16px', fontFamily: 'Arial, sans-serif'
     }}>
@@ -29,7 +29,7 @@ export default function Page() {
   if (!entered) {
     return (
       <main style={{
-        position: 'fixed', inset: 0, background: '#0a0a0a', color: '#fff',
+        position: 'fixed', inset: 0, background: 'transparent', color: '#fff',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         gap: '24px', fontFamily: 'Arial, sans-serif'
       }}>
