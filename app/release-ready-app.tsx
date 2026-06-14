@@ -222,7 +222,7 @@ export default function ReleaseReadyApp() {
       <footer className="relative z-10 flex-none flex flex-col items-center gap-4 py-4">
         <p className="text-[10px] font-medium tracking-[0.2em] text-white/30">Powered By deVee Boutique Label</p>
         <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 shadow-lg">
-          <img src="/label_logo.jpg" alt="Label" className="w-full h-full object-cover" />
+          <img src="/label_logo.png" alt="Label" className="w-full h-full object-cover" />
         </div>
       </footer>
     </main>
