@@ -2,13 +2,16 @@
 
 import { useCallback, useRef, useState, useEffect } from "react"
 import { Download, Upload, Loader2, Move, CheckSquare, Square } from "lucide-react"
+import heic2any from "heic2any"
 
 export default function ReleaseReadyApp() {
   const [appState, setAppState] = useState<"idle" | "validating" | "ready">("idle")
   const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const [imageSize, setImageSize] = useState<{width: number, height: number} | null>(null)
   const [masteredUrl, setMasteredUrl] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
 
+  const [zoom, setZoom] = useState(1)
   const [offset, setOffset] = useState({ x: 0.5, y: 0.5 })
   const [isDragging, setIsDragging] = useState(false)
   const [addSignature, setAddSignature] = useState(false)
@@ -40,12 +43,20 @@ export default function ReleaseReadyApp() {
     });
 
     ctx.clearRect(0, 0, 3000, 3000);
-    const scale = Math.max(3000 / img.width, 3000 / img.height);
-    const dw = img.width * scale;
-    const dh = img.height * scale;
+    
+    // Fill with black in case zoom is less than 1
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, 3000, 3000);
 
-    const dx = (3000 - dw) * offset.x;
-    const dy = (3000 - dh) * offset.y;
+    const pctW = Math.max(1, img.width / img.height) * zoom * 100;
+    const pctH = Math.max(1, img.height / img.width) * zoom * 100;
+    const pctX = (100 - pctW) * offset.x;
+    const pctY = (100 - pctH) * offset.y;
+
+    const dw = 3000 * (pctW / 100);
+    const dh = 3000 * (pctH / 100);
+    const dx = 3000 * (pctX / 100);
+    const dy = 3000 * (pctY / 100);
 
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
@@ -75,7 +86,7 @@ export default function ReleaseReadyApp() {
     setMasteredUrl(canvas.toDataURL("image/jpeg", 0.95));
     setIsProcessing(false);
     setAppState("ready");
-  }, [offset, addSignature])
+  }, [offset, addSignature, zoom])
 
   useEffect(() => {
     if (imageUrl && !isDragging) {
@@ -137,10 +148,32 @@ export default function ReleaseReadyApp() {
                 <Upload className="w-8 h-8 text-[#FFD700]" />
                 <p className="text-xs font-bold uppercase tracking-widest text-white/40">Upload Artwork</p>
               </button>
-              <input type="file" ref={fileInputRef} onChange={(e) => {
+              <input type="file" ref={fileInputRef} onChange={async (e) => {
                 const file = e.target.files?.[0]
-                if (file) { setAppState("validating"); setImageUrl(URL.createObjectURL(file)) }
-              }} className="hidden" accept="image/*" />
+                if (file) { 
+                  setAppState("validating"); 
+                  let finalUrl = "";
+                  if (file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif") || file.type === "image/heic") {
+                    try {
+                      const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.9 });
+                      finalUrl = URL.createObjectURL(Array.isArray(converted) ? converted[0] : converted);
+                    } catch (err) {
+                      console.error("HEIC conversion failed", err);
+                      setAppState("idle");
+                      return;
+                    }
+                  } else {
+                    finalUrl = URL.createObjectURL(file);
+                  }
+                  
+                  const img = new Image();
+                  img.onload = () => {
+                    setImageSize({ width: img.width, height: img.height });
+                    setImageUrl(finalUrl);
+                  };
+                  img.src = finalUrl;
+                }
+              }} className="hidden" accept="image/*,.heic,.heif" />
             </div>
           ) : (
             <div className="space-y-6 flex flex-col items-center">
@@ -155,15 +188,20 @@ export default function ReleaseReadyApp() {
                 onTouchEnd={() => setIsDragging(false)}
                 className="relative w-full aspect-square rounded-2xl overflow-hidden bg-black border border-white/5 cursor-move"
               >
-                <img
-                  src={imageUrl!}
-                  style={{
-                    objectFit: 'cover',
-                    objectPosition: `${offset.x * 100}% ${offset.y * 100}%`,
-                    transition: isDragging ? 'none' : 'object-position 0.2s ease-out'
-                  }}
-                  className={`w-full h-full pointer-events-none ${appState === "validating" || isProcessing ? "opacity-40 blur-sm" : ""}`}
-                />
+                {imageSize && (
+                  <img
+                    src={imageUrl!}
+                    style={{
+                      position: 'absolute',
+                      width: `${Math.max(1, imageSize.width / imageSize.height) * zoom * 100}%`,
+                      height: `${Math.max(1, imageSize.height / imageSize.width) * zoom * 100}%`,
+                      left: `${(100 - (Math.max(1, imageSize.width / imageSize.height) * zoom * 100)) * offset.x}%`,
+                      top: `${(100 - (Math.max(1, imageSize.height / imageSize.width) * zoom * 100)) * offset.y}%`,
+                      transition: isDragging ? 'none' : 'all 0.2s ease-out'
+                    }}
+                    className={`max-w-none pointer-events-none ${appState === "validating" || isProcessing ? "opacity-40 blur-sm" : ""}`}
+                  />
+                )}
 
                 {addSignature && appState === "ready" && !isDragging && (
                   <img
@@ -189,6 +227,19 @@ export default function ReleaseReadyApp() {
 
               {appState === "ready" && (
                 <div className="w-full space-y-4">
+                  <div className="flex flex-col items-center gap-2 bg-[#1a1a1a] p-5 rounded-2xl border border-white/5">
+                    <span className="text-[11px] font-black tracking-widest text-white/70 uppercase">Zoom: {Math.round(zoom * 100)}%</span>
+                    <input 
+                      type="range" 
+                      min="0.1" 
+                      max="3" 
+                      step="0.01" 
+                      value={zoom} 
+                      onChange={(e) => setZoom(parseFloat(e.target.value))}
+                      className="w-full accent-[#FFD700] cursor-pointer"
+                    />
+                  </div>
+
                   <button
                     onClick={() => setAddSignature(!addSignature)}
                     className="w-full flex items-center gap-4 bg-[#1a1a1a] p-5 rounded-2xl border border-white/5 hover:border-[#FFD700]/30 transition-all"
@@ -211,7 +262,7 @@ export default function ReleaseReadyApp() {
                   }} className="w-full bg-[#FFD700] text-black font-black py-5 rounded-xl uppercase text-xs shadow-[0_0_25px_rgba(255,215,0,0.2)] active:scale-95 transition-all flex items-center justify-center gap-2">
                     <Download className="w-5 h-5" /> Download Master Artwork
                   </button>
-                  <button onClick={() => {setImageUrl(null); setAppState("idle"); setOffset({x:0.5, y:0.5}); setAddSignature(false)}} className="w-full text-white/20 font-bold py-2 uppercase text-[9px]">Reset Calculator</button>
+                  <button onClick={() => {setImageUrl(null); setImageSize(null); setZoom(1); setAppState("idle"); setOffset({x:0.5, y:0.5}); setAddSignature(false)}} className="w-full text-white/20 font-bold py-2 uppercase text-[9px]">Reset Calculator</button>
                 </div>
               )}
             </div>
