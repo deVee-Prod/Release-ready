@@ -157,8 +157,9 @@ export default function ReleaseReadyApp() {
                     try {
                       const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.9 });
                       finalUrl = URL.createObjectURL(Array.isArray(converted) ? converted[0] : converted);
-                    } catch (err) {
+                    } catch (err: any) {
                       console.error("HEIC conversion failed", err);
+                      alert("HEIC Conversion Error: " + (err.message || JSON.stringify(err)));
                       setAppState("idle");
                       return;
                     }
