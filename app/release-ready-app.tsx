@@ -2,7 +2,7 @@
 
 import { useCallback, useRef, useState, useEffect } from "react"
 import { Download, Upload, Loader2, Move, CheckSquare, Square } from "lucide-react"
-import heic2any from "heic2any"
+import { heicTo } from "heic-to"
 
 export default function ReleaseReadyApp() {
   const [appState, setAppState] = useState<"idle" | "validating" | "ready">("idle")
@@ -155,7 +155,7 @@ export default function ReleaseReadyApp() {
                   let finalUrl = "";
                   if (file.name.toLowerCase().endsWith(".heic") || file.name.toLowerCase().endsWith(".heif") || file.type === "image/heic") {
                     try {
-                      const converted = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.9 });
+                      const converted = await heicTo({ blob: file, type: "image/jpeg", quality: 0.9 });
                       finalUrl = URL.createObjectURL(Array.isArray(converted) ? converted[0] : converted);
                     } catch (err: any) {
                       console.error("HEIC conversion failed", err);
