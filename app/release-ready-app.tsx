@@ -23,7 +23,7 @@ export default function ReleaseReadyApp() {
   const startOffset = useRef({ x: 0.5, y: 0.5 })
 
   useEffect(() => {
-    document.title = "deVee | Release Ready";
+    document.title = "Release Ready";
   }, []);
 
   const handleMastering = useCallback(async (sourceUrl: string) => {
