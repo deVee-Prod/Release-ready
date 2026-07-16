@@ -131,7 +131,7 @@ export default function ReleaseReadyApp() {
               3000×3000 CUTTER
             </p>
             <p className="text-[9px] text-white/25 tracking-wide text-center">
-              הפורמט הנדרש עבור Spotify &amp; Apple Music
+              The Required Format For Spotify & Apple Music
             </p>
           </div>
           {appState === "idle" ? (
