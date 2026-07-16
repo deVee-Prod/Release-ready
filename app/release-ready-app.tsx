@@ -112,13 +112,13 @@ export default function ReleaseReadyApp() {
   }
 
   return (
-    <main className="relative min-h-[100dvh] text-white flex flex-col items-center px-4 py-6 gap-10 md:gap-0 md:py-8 font-sans overflow-y-auto select-none">
+    <main className="relative min-h-[100dvh] text-white flex flex-col items-center px-4 pb-6 gap-10 md:gap-0 md:pb-8 font-sans overflow-y-auto select-none">
 
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#FFD700]/20 rounded-full blur-[120px]" />
       </div>
 
-      <header className="relative z-20 flex flex-col items-center shrink-0 mb-4 pt-6">
+      <header className="w-full relative z-20 flex flex-col items-center shrink-0 mt-8 mb-6">
         <img src="/Release Ready iCon.png?v=2" alt="Release Ready" className="w-[100px] h-[100px] mb-2 object-contain" />
         <h1 className="text-[10px] font-bold tracking-[0.5em] uppercase text-white/60">Release Ready</h1>
       </header>
