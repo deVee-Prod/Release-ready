@@ -123,23 +123,23 @@ export default function ReleaseReadyApp() {
  <h1 className="text-[10px] font-bold tracking-[0.5em] uppercase text-white/60">Release Ready</h1>
  </header>
 
- <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center max-w-[450px]">
- <div className="w-full bg-[#121212] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl backdrop-blur-md">
+  <div className="relative z-10 w-full flex-1 flex flex-col items-center justify-center max-w-xl mb-12">
+    <div className="w-full bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] p-10 space-y-8 border border-white/5 shadow-2xl">
 
- <div className="flex flex-col items-center gap-1.5 mb-6">
- <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#FFD700]/50">
- 3000×3000 CUTTER
- </p>
- <p className="text-[9px] text-white/25 tracking-wide text-center">
- The Required Format For Spotify & Apple Music
- </p>
- </div>
- {appState === "idle" ? (
- <div className="w-full aspect-square flex items-center justify-center">
- <button onClick={() => fileInputRef.current?.click()} className="group w-full h-full border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 hover:bg-[#FFD700]/5 transition-all">
- <Upload className="w-8 h-8 text-[#FFD700]" />
- <p className="text-xs font-bold uppercase tracking-widest text-white/40">Upload Artwork</p>
- </button>
+      <div className="flex flex-col items-center gap-1.5 mb-6">
+        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#FFD700]/50">
+          3000×3000 CUTTER
+        </p>
+        <p className="text-[9px] text-white/25 tracking-wide text-center">
+          The Required Format For Spotify & Apple Music
+        </p>
+      </div>
+      {appState === "idle" ? (
+        <div className="w-full aspect-square flex items-center justify-center">
+          <button onClick={() => fileInputRef.current?.click()} className="group w-full h-full border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 transition-all p-12">
+            <Upload className="w-8 h-8 text-[#FFD700]" />
+            <p className="text-xs font-bold uppercase tracking-widest text-white/40">Upload Artwork</p>
+          </button>
  <input type="file" ref={fileInputRef} onChange={async (e) => {
  const file = e.target.files?.[0]
  if (file) { 
