@@ -8,7 +8,7 @@ const ReleaseReadyApp = dynamic(() => import('./release-ready-app'), {
     <main style={{
       position: 'fixed', inset: 0, background: 'transparent', color: '#fff',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-      gap: '16px', fontFamily: 'Arial, sans-serif'
+      gap: '16px'
     }}>
       <div style={{
         width: 32, height: 32, border: '2px solid rgba(255,215,0,0.2)',
@@ -31,12 +31,12 @@ export default function Page() {
       <main style={{
         position: 'fixed', inset: 0, background: 'transparent', color: '#fff',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        gap: '24px', fontFamily: 'Arial, sans-serif'
+        gap: '24px'
       }}>
         <img src="/Release Ready iCon.png?v=2" alt="Release Ready" style={{ width: 72, height: 72, objectFit: 'contain' }} />
-        <p style={{ fontSize: '10px', letterSpacing: '0.5em', color: '#6b7280', textTransform: 'uppercase', margin: 0 }}>
+        <h1 className="text-[10px] font-bold tracking-[0.5em] uppercase text-white/60">
           Release Ready
-        </p>
+        </h1>
         <button
           onClick={() => setEntered(true)}
           style={{
