@@ -124,7 +124,7 @@ export default function ReleaseReadyApp() {
       </header>
 
       <main className="flex-1 flex items-center justify-center p-6 relative z-10">
-        <div className="w-full max-w-xl bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] p-10 space-y-8 border border-white/5 shadow-2xl relative z-20">
+        <div className={`w-full max-w-xl bg-white/[0.03] backdrop-blur-3xl rounded-[2.5rem] p-10 space-y-8 border border-white/5 shadow-2xl relative z-20 ${appState === 'idle' ? 'min-h-[450px] flex flex-col justify-center' : ''}`}>
 
       <div className="flex flex-col items-center gap-1.5 mb-6">
         <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#FFD700]/50">
@@ -136,7 +136,7 @@ export default function ReleaseReadyApp() {
       </div>
       {appState === "idle" ? (
         <div className="w-full">
-          <button onClick={() => fileInputRef.current?.click()} className="group w-full min-h-[400px] border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 transition-all p-12">
+          <button onClick={() => fileInputRef.current?.click()} className="group w-full border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 transition-all p-12">
             <Upload className="w-8 h-8 text-[#FFD700]" />
             <p className="text-xs font-bold uppercase tracking-widest text-white/40">Upload Artwork</p>
           </button>
