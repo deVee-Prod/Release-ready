@@ -136,7 +136,7 @@ export default function ReleaseReadyApp() {
       </div>
       {appState === "idle" ? (
         <div className="w-full">
-          <button onClick={() => fileInputRef.current?.click()} className="group w-full min-h-[400px] border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 transition-all p-12">
+          <button onClick={() => fileInputRef.current?.click()} className="group w-full min-h-[260px] border-2 border-dashed border-white/10 rounded-2xl flex flex-col items-center justify-center gap-5 hover:border-[#FFD700]/40 transition-all p-12">
             <Upload className="w-8 h-8 text-[#FFD700]" />
             <p className="text-xs font-bold uppercase tracking-widest text-white/40">Upload Artwork</p>
           </button>
